@@ -4,6 +4,7 @@ __author__ = "mhoelzer"
 
 
 import requests
+import time
 
 
 def get_astronauts():
@@ -17,8 +18,23 @@ def get_astronauts():
             person["name"], person["craft"]))
 
 
+def geographic_coordinates():
+    url = "http://api.open-notify.org/iss-now.json"
+    request = requests.get(url)
+    req_data = request.json()
+    longitude = req_data["iss_position"]["longitude"]
+    latitude = req_data["iss_position"]["latitude"]
+    timestamp = time.ctime(req_data["timestamp"])
+    print("Longitude: {}".format(longitude))
+    print("Latitude: {}".format(latitude))
+    print("Timestamp: {}".format(timestamp))
+
+
 def main():
+    print("~~~Part A: Get Astronauts~~~")
     get_astronauts()
+    print("~~~Part B: Geographic Coordinates~~~")
+    geographic_coordinates()
 
 
 if __name__ == '__main__':
