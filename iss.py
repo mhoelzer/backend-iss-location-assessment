@@ -5,6 +5,7 @@ __author__ = "mhoelzer"
 
 import requests
 import time
+import turtle
 
 
 def get_astronauts():
@@ -28,6 +29,27 @@ def geographic_coordinates():
     print("Longitude: {}".format(longitude))
     print("Latitude: {}".format(latitude))
     print("Timestamp: {}".format(timestamp))
+    return req_data
+
+
+def iss_coordinates():
+    req_data = geographic_coordinates()
+    longitude = req_data["iss_position"]["longitude"]
+    latitude = req_data["iss_position"]["latitude"]
+
+    screen = turtle.Screen()
+    screen.setup(width=720, height=360, startx=None, starty=None)
+    screen.bgpic("map.gif")
+    screen.setworldcoordinates(-180, -90, 180, 90)
+
+    iss_screen = turtle.Turtle()
+    screen.register_shape("iss.gif")
+    iss_screen.shape("iss.gif")
+    # iss_screen.setheading(180)
+    iss_screen.penup()
+    # print(longitude, latitude)
+    iss_screen.goto(float(longitude), float(latitude))
+    screen.exitonclick()
 
 
 def main():
@@ -35,6 +57,8 @@ def main():
     get_astronauts()
     print("~~~Part B: Geographic Coordinates~~~")
     geographic_coordinates()
+    print("~~~Part C: ISS Coordinates~~~")
+    iss_coordinates()
 
 
 if __name__ == '__main__':
