@@ -9,7 +9,7 @@ import turtle
 
 
 def print_astronauts():
-    """"""
+    """prints astronauts info"""
     url = "http://api.open-notify.org/astros.json"
     request = requests.get(url)
     req_data = request.json()
@@ -20,22 +20,22 @@ def print_astronauts():
             person["name"], person["craft"]))
 
 
-# def geographic_coordinates():
 def get_iss_coordinates():
+    """finds iss coordinates (lon, lat, timestamp)"""
     url = "http://api.open-notify.org/iss-now.json"
     request = requests.get(url)
     req_data = request.json()
-    longitude = req_data["iss_position"]["longitude"]
     latitude = req_data["iss_position"]["latitude"]
+    longitude = req_data["iss_position"]["longitude"]
     timestamp = time.ctime(req_data["timestamp"])
-    print("Longitude: {}".format(longitude))
     print("Latitude: {}".format(latitude))
+    print("Longitude: {}".format(longitude))
     print("Timestamp: {}".format(timestamp))
     return (longitude, latitude, timestamp)
 
 
 def setup_screen():
-    # lon, lat, timestamp = geographic_coordinates()
+    """creates the map screen to put iss and indy on map"""
     screen = turtle.Screen()
     screen.setup(width=720, height=360, startx=None, starty=None)
     screen.bgpic("map.gif")
@@ -44,48 +44,49 @@ def setup_screen():
 
 
 def show_iss(screen, lat, lon):
+    """puts iss location on map"""
     iss = turtle.Turtle()
     screen.register_shape("iss.gif")
     iss.shape("iss.gif")
     iss.setheading(90)
     iss.penup()
-    iss.goto(float(lon), float(lat)) # goto expects screen coor
+    iss.goto(float(lon), float(lat))  # goto expects screen coors
 
 
 def get_rise_time(lat, lon):
+    """finds the time"""
     url = "http://api.open-notify.org/iss-pass.json"
     payload = {"lat": lat, "lon": lon}
     response = requests.get(url, params=payload)
     response.raise_for_status()
     req_data = response.json()
-    # print(req_data)
     timestamp = req_data["response"][0]["risetime"]
     return timestamp
 
 
 def show_dot(lat, lon, timestamp):
+    """puts indy dot on the map along with the timestamp"""
     # Assumes that screen is already setup
     indy_dot = turtle.Turtle()
     indy_dot.penup()
     indy_dot.color("yellow")
     indy_dot.goto(lon, lat)
     indy_dot.dot(5)
-    # indy_dot.shape("circle")
     indy_dot.hideturtle()
     indy_dot.write(time.ctime(timestamp))
 
 
 def main():
+    """creates the screen and runs all the functions"""
     # setup screen stuff
     screen = setup_screen()
 
     print("~~~Part A: Get Astronauts~~~")
     print_astronauts()
-    # print(astro_data)
 
     print("~~~Part B: Geographic Coordinates~~~")
     longitude, latitude, timestamp = get_iss_coordinates()
-    # print coords
+    # coords get printed inside function
 
     print("~~~Part C: ISS Coordinates~~~")
     show_iss(screen, latitude, longitude)
