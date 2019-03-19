@@ -11,11 +11,11 @@ import turtle
 def print_astronauts():
     """prints astronauts info"""
     url = "http://api.open-notify.org/astros.json"
-    request = requests.get(url)
-    req_data = request.json()
+    response = requests.get(url)
+    res_data = response.json()
     print("There are currently {} astronauts in space.".format(
-        req_data["number"]))
-    for person in req_data["people"]:
+        res_data["number"]))
+    for person in res_data["people"]:
         print("{} is currently aboard the {}.".format(
             person["name"], person["craft"]))
 
@@ -24,10 +24,10 @@ def get_iss_coordinates():
     """finds iss coordinates (lon, lat, timestamp)"""
     url = "http://api.open-notify.org/iss-now.json"
     request = requests.get(url)
-    req_data = request.json()
-    latitude = req_data["iss_position"]["latitude"]
-    longitude = req_data["iss_position"]["longitude"]
-    timestamp = time.ctime(req_data["timestamp"])
+    res_data = request.json()
+    latitude = res_data["iss_position"]["latitude"]
+    longitude = res_data["iss_position"]["longitude"]
+    timestamp = time.ctime(res_data["timestamp"])
     print("Latitude: {}".format(latitude))
     print("Longitude: {}".format(longitude))
     print("Timestamp: {}".format(timestamp))
@@ -59,8 +59,8 @@ def get_rise_time(lat, lon):
     payload = {"lat": lat, "lon": lon}
     response = requests.get(url, params=payload)
     response.raise_for_status()
-    req_data = response.json()
-    timestamp = req_data["response"][0]["risetime"]
+    res_data = response.json()
+    timestamp = res_data["response"][0]["risetime"]
     return timestamp
 
 
