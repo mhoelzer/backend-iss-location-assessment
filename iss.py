@@ -23,8 +23,8 @@ def print_astronauts():
 def get_iss_coordinates():
     """finds iss coordinates (lon, lat, timestamp)"""
     url = "http://api.open-notify.org/iss-now.json"
-    request = requests.get(url)
-    res_data = request.json()
+    response = requests.get(url)
+    res_data = response.json()
     latitude = res_data["iss_position"]["latitude"]
     longitude = res_data["iss_position"]["longitude"]
     timestamp = time.ctime(res_data["timestamp"])
